@@ -17,6 +17,8 @@
     --bg-javascript:#ebf0ff;
     --bg-acessibilidade:#f6e7ff;
     --button-bg:#fff;
+    --grenn:#26d782;
+    --red:#ee5454;
     --primary-text-color:#313e51;
     --secondary-text-color:#626c7f;
     --bg-mobile:url(../../assets/images/pattern-background-mobile-light.svg);
@@ -183,7 +185,16 @@ main{
 
 
 .alternativas label:has(input:checked){
-    
+    outline: 3px solid var(--purple);
+
+    & span {
+        background: var(--purple);
+        color: var(--white);
+    }
+
+
+
+
 }
 
 
