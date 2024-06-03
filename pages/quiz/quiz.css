@@ -232,13 +232,16 @@ main{
 
 }
 
-.alternativas label#correta{
-    outline: 3px solid var(--grenn) ;
+.alternativas label#errada{
+    outline: 3px solid var(--grenn);
+
     & span{
         background: var(--grenn);
         color: var(--white);
     }
+
 }
+
 
 .alternativas label#errada{
     outline: 3px solid var(--red);
