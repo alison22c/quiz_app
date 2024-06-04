@@ -157,14 +157,19 @@ function validarResposta(){
     const botaoEnviar=document.querySelector(".alternativas button")
     botaoEnviar.innerText="próxima"
     botaoEnviar.removeEventListener("click",validarResposta)
-    botaoEnviar.addEventListener("click",proximaPergunta)
+    
 
 
 
 
 
     if (pergunta === 10){
+        
         botaoEnviar.innerText="Finalizar"
+        botaoEnviar.addEventListener("click",finalizar)
+
+    }else{
+        botaoEnviar.addEventListener("click",proximaPergunta)
     }
 
     if (resposta === quiz.questions[pergunta-1].answer) {
@@ -176,6 +181,11 @@ function validarResposta(){
     }
 
     pergunta = pergunta +1
+}
+
+function finalizar(){
+    localStorage.setItem("pontos",pontos)
+    window.location.href="../resultado/resultado.html"
 }
 
 
