@@ -10,8 +10,8 @@ let  quiz = {}
 let  pontos = 0
 let pergunta=1
 let resposta = ""
-let idInputResposta=""
-let respostaCorretaId=""
+let idInputResposta= ""
+let respostaCorretaId= ""
 
 botaoTema.addEventListener("click",()=> {
     TrocarTema(body,botaoTema)
@@ -52,9 +52,9 @@ async function buscarPerguntas(){
     const urlDados = "../../data.json"
     
     await fetch(urlDados).then(resposta => resposta.json()).then(dados=>{
-       dados.quizzes.forEach(dado =>{
-        if(dado.title === assunto){
-            quiz = dado
+       dados.quizzes.forEach(dados =>{
+        if(dados.title === assunto){
+            quiz = dados
         }
        })
     })
@@ -88,7 +88,7 @@ function montarPergunta(){
                 <input type="radio"  id="alternativa_a"  name="alternativa" value=" ${alterarSinais(quiz.questions[pergunta-1].options[0])}">
 
                 <div>
-                    <span>A</span>
+                    <span> A </span>
                     ${alterarSinais(quiz.questions[pergunta-1].options[0])}
 
                 </div>
@@ -97,7 +97,7 @@ function montarPergunta(){
 
 
             <label for="alternativa_b">
-                <input type="radio" id="alternativa_b" name="alternativa" value="${alterarSinais(quiz.questions[pergunta-1].options[1])}">
+                <input type="radio" id="alternativa_b" name="alternativa" value= ${alterarSinais(quiz.questions[pergunta-1].options[1])}">
 
                 <div>
                     <span>B</span>
@@ -117,7 +117,7 @@ function montarPergunta(){
             </label>
 
             <label for="alternativa_d" >
-                <input type="radio" id="alternativa_d" name="alternativa" value=" ${alterarSinais(quiz.questions[pergunta-1].options[3])}" >
+                <input type="radio" id="alternativa_d" name="alternativa" value=" ${alterarSinais(quiz.questions[pergunta-1].options[3])}">
 
                 <div>
                     <span>D</span>
@@ -129,12 +129,13 @@ function montarPergunta(){
          </form>
            
 
-            <button>Enviar</button>
+            <button>Responder</button>
 
 
         </section>
 `
 }
+
 
 
 function alterarSinais(texto){
@@ -146,46 +147,65 @@ function guardarResposta(evento){
     resposta=evento.target.value
     idInputResposta=evento.target.id
 
-
     const botaoEnviar=document.querySelector(".alternativas button")
     botaoEnviar.addEventListener("click",validarResposta)
  
 }
 
-function validarResposta() {
-    if(resposta === quiz.questions[pergunta-1].answer){
-        document.querySelector(`label[for='${idInputResposta}']`).setAttribute("id","correta")
-        pontos= pontos + 1
-    }else{
-        document.querySelector(`label[for='${idInputResposta}']`).setAttribute("id","errada")
-        document.querySelector(`label[for='${respostaCorretaId}']`).setAttribute("id","correta")
+function validarResposta(){
+
+    const botaoEnviar=document.querySelector(".alternativas button")
+    botaoEnviar.innerText="próxima"
+    botaoEnviar.removeEventListener("click",validarResposta)
+    botaoEnviar.addEventListener("click",proximaPergunta)
+
+
+
+
+
+    if (pergunta === 10){
+        botaoEnviar.innerText="Finalizar"
     }
-} 
-   
+
+    if (resposta === quiz.questions[pergunta-1].answer) {
+        document.querySelector(`label[for='${idInputResposta}']`).setAttribute("id","correta")
+        pontos = pontos+1
+    }else {
+        document.querySelector(`label[for='${idInputResposta}']`).setAttribute("id","errada")
+        document.querySelector(`label[for='${idInputResposta}']`).setAttribute("id","correta")
+    }
+
+    pergunta = pergunta +1
+}
+
+
+function proximaPergunta(){
+    montarPergunta()
+    adicionarEventoInputs()
+}
 
 
 
+
+function adicionarEventoInputs(){
+    
+    const inputsResposta=document.querySelectorAll(".alternativas input")
+    inputsResposta.forEach(input => {
+        input.addEventListener("click",guardarResposta)
+
+        if(input.value === quiz.questions[pergunta-1].answer){
+            respostaCorretaId = input.id
+        }
+    })
+
+}
 
 
 async function iniciar(){
     alterarAssunto()
     await buscarPerguntas()
     montarPergunta()
-
-
-    const inputsResposta=document.querySelectorAll(".alternativas input")
-    inputsResposta.forEach(input => {
-        input.addEventListener("click",guardarResposta)
-
-
-        if(input.value === quiz.questions[pergunta-1].answer){
-            respostaCorretaId=input.id
-        }
-
-    })
-
-
-
+    adicionarEventoInputs()
 }
 
 iniciar()

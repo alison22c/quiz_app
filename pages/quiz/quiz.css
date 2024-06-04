@@ -232,7 +232,7 @@ main{
 
 }
 
-.alternativas label#errada{
+.alternativas label#correta{
     outline: 3px solid var(--grenn);
 
     & span{
